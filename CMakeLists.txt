@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 2.8.11)
+project(Tutorial)
+
+if (MSVC)
+    include_directories("include")
+    link_directories("lib")
+    add_executable(tutorial "src/main.cpp" "src/glad.c")
+    target_link_libraries(tutorial glfw3.lib)
+    target_link_libraries(tutorial opengl32.lib)
+endif (MSVC)
