@@ -2,7 +2,7 @@ Que es OpenGL
 =============
 
 Esta es una maquina de estado. Nosotros vamos a acceder a los miembros de ese
-estado, mitificándolos mediante funciones.
+estado, modificandolos mediante funciones.
 
 El pipeline
 -----------
