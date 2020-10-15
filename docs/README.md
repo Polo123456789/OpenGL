@@ -17,7 +17,7 @@ Temas
 =====
 
 * [Que es?](#que-es)
-* [Primera Ventana](#primera-ventana)
+* [Primera Ventana](#la-primera-ventana)
 * [Triangulo Hello World](#triangulo-hello-world)
 
 Que es
