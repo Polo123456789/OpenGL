@@ -1,24 +1,21 @@
 ---
 title: "OpenGl"
 author: "Pablo Sanchez"
+toc: true
 descripcion:
     "Pues estas seran mis notas en el camino para aprender OpenGl, y como se
     bien las dudas que me van surjiendo, espero poder ahorrarle dolores de
-    cabeza a alguien en el futuro si las llega a leer."
+    cabeza a alguien en el futuro si las llega a leer. Ya cuando sepa mas lo
+    complemento"
 ---
 
-Preeliminares
+Preliminares
 =============
 
 Lo voy a trabajar usando GLFW, y obteniendo los punteros a las funciones usando
-GLAD
-
-Temas
-=====
-
-* [Que es?](#que-es)
-* [Primera Ventana](#la-primera-ventana)
-* [Triangulo Hello World](#triangulo-hello-world)
+GLAD. Se notara que voy leyendo el learopengl.com (@sitioWeb) mientras escribo
+esto. En principio es para recordar la informacion, y conforme sepa mas lo voy
+a ir complementando.
 
 Que es
 ======
@@ -27,7 +24,7 @@ Que es OpenGL
 -------------
 
 Esta es una maquina de estado. Nosotros vamos a acceder a los miembros de ese
-estado, modificandolos mediante funciones.
+estado, modificándolos mediante funciones.
 
 ### El pipeline
 
@@ -43,15 +40,16 @@ dependiendo del resultado del anterior. Vea el Triangulo Hola Mundo
 
 ### Proceso
 
-1. Vertex Shader: Coordenadas 3D a otras
-2. Primitive Assembly: Coordenadas a figuras (Primitivas, como triangulos)
-3. Geometry Shader: Toma primirivas, y genera mas figuras
-4. Rasterization: De figura a pixeles en la pantalla. En el proceso de eliminan
-   todos los fragmentos que quedan fuera de la vista del usuario para mejorar
-   la performance.
-5. Fragment Shader: Le da el color al pixel. Aqui entra la luz, blending, etc.
+1. **Vertex Shader:** Coordenadas 3D a otras
+2. **Primitive Assembly:** Coordenadas a figuras (Primitivas, como triángulos)
+3. **Geometry Shader:** Toma primitivas, y genera mas figuras
+4. **Rasterization:** De figura a pixeles en la pantalla. En el proceso de
+   eliminan todos los fragmentos que quedan fuera de la vista del usuario para
+   mejorar la performance.
+5. **Fragment Shader:** Le da el color al pixel. Aquí entra la luz, blending,
+   etc.
 
-En openGL moderno, nosotros tenemos que definir almenos un vertex shader, y un
+En openGL moderno, nosotros tenemos que definir al menos un vertex shader, y un
 fragment shader.
 
 
@@ -82,16 +80,17 @@ Primero que nada, incializamos openGL:
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 ~~~
 
-Aqui se puede ver el ejemplo de que este es una maquina de estado, ya que tiene
+Aquí se puede ver el ejemplo de que este es una maquina de estado, ya que tiene
 los datos, como GLFW_CONTEXT_VERSION_MAJOR, que nosotros modificamos mediante
-funciones. Aqui lo que hacemos es darle la versión, y el perfil que queremos
-usar. En este caso usaremos el perfil core, que es el que nos da mas control
+funciones. Aquí lo que hacemos es darle la versión, y el perfil que queremos
+usar. En este caso usaremos el perfil core, que es el que nos da mas control.
 
 Luego procedemos a montar la ventana:
 
 ~~~c++
     // Creamos la ventana
     GLFWwindow* window = glfwCreateWindow(800, 600, "Aprendiendo",
+        nullptr, nullptr);
     // Revisamos que se creara correctamente
     if (window == nullptr) {
         std::cout << "No se pudo crear la ventana\n";
@@ -122,7 +121,7 @@ Procedemos a darle el tamaño de la ventana
     glClearColor(0.2f, 0.3f, 0.3f, 0.1f);
 ~~~
 
-Y terminamos con el siguiente codigo con algunos añadidos
+Y terminamos con el siguiente código con algunos añadidos
 
 ~~~c++
 #include<iostream>
@@ -185,6 +184,12 @@ int main(void) {
 Triangulo Hello World
 =====================
 
+Nota
+----
+
+Si no te funciona, saltate un capitulo, leete el otro y de regreso a el
+triangulo.
+
 Resumen
 -------
 
@@ -206,10 +211,10 @@ Hola Mundo
 
 ### Vertex Buffer
 
-Partiendo de el codigo de la vez pasada, y con la lectura de el proceso en la 
+Partiendo de el código de la vez pasada, y con la lectura de el proceso en la 
 primera parte, vamos a dibujar un triangulo.
 
-Primero las posiciones de los vertices. Con las coordenadas de Z en cero.
+Primero las posiciones de los vértices. Con las coordenadas de Z en cero.
 Recuerda que OpenGl trabaja con un sistema de coordenadas de -1 a 1
 
 ~~~c++
@@ -226,7 +231,7 @@ Ahora vamos a enviar a la memoria de la GPU los datos. Este se guarda en lo que
 se llama como vertex buffer. Para entenderlo quitale lo de vertex, es un buffer
 de datos.
 
-*Nota:* Pasar los datos del CPU a la GPU es una operacion costosa, asi que
+**Nota:** Pasar los datos del CPU a la GPU es una operación costosa, así que
 igual que cuando escribes al disco, trata de hacer todo lo que se pueda de un
 solo.
 
@@ -245,7 +250,7 @@ Y le damos el tipo:
 ~~~
 
 De ahora en adelante lo que haremos sera configurar este buffer. Ahora vamos a
-copiar los vertices a el buffer.
+copiar los vértices a el buffer.
 
 ~~~c++
     // Y copiamos los datos dandole un uso
@@ -264,7 +269,7 @@ El uso puede ser:
 Ahora vamos a escribir el shader. Este se escribe en el lenguaje GLSL (OpenGL
 Shading Language). Primero le damos la version, luego declaramos los atributos
 del vertex_buffer en el shader usando la keyword in. Dejamos layout (location =
-0), eso lo veremos despues. La salida tiene que ser el gl_Position, que sera un
+0), eso lo veremos después. La salida tiene que ser el gl_Position, que sera un
 vec4. En este caso solo pasaremos del vec3 al vec4 dejando vec.w en 1.0
 
 ~~~glsl
@@ -277,13 +282,13 @@ void main()
 }
 ~~~
 
-Este sera probablemente el shader mas facil que se puede hacer, ya que solo
-pasamos la informacion. Esto lo podemos hacer gracias a que ya tenemos los
+Este sera probablemente el shader mas fácil que se puede hacer, ya que solo
+pasamos la información. Esto lo podemos hacer gracias a que ya tenemos los
 datos normalizados, pero esto no siempre sera asi.
 
-#### Compilacion del shader
+#### Compilación del shader
 
-Lo dejamos escrito como tal en nuestro codigo fuente:
+Lo dejamos escrito como tal en nuestro código fuente:
 
 ~~~c++
 const char* vertex_shader_source = "#version 330 core\n"
@@ -294,8 +299,8 @@ const char* vertex_shader_source = "#version 330 core\n"
 "}\0";
 ~~~
 
-Este sera compilado en el runtime, asi que procederemos a asignarle una id,
-darle el codigo fuente a la id, y a compilarlo.
+Este sera compilado en el runtime, así que procederemos a asignarle una id,
+darle el código fuente a la id, y a compilarlo.
 
 ~~~c++
     unsigned int vertex_shader;
@@ -331,7 +336,7 @@ void main()
 }
 ~~~
 
-#### Compilacion del shader
+#### Compilación del shader
 
 ~~~c++
     // Fragment shader
@@ -387,16 +392,16 @@ Y recuerda que ahora puedes borrar los shaders.
     glDeleteShader(fragment_shader);
 ~~~
 
-Esto deveriamos abstraerlo a una  funcion afuera de el codigo.
+Esto deberíamos abstraerlo a una  función afuera de el código.
 
-*ULTIMOS ESFUERZOS:* Ya enviamos los datos al GPU, y le dimos las instrucciones
-al GPU sobre como procesar la informacion. El ultimo problema es que OpenGl no
-sabe como interptetar el vertex buffer que enviamos la memoria, ni sabe como
+**ÚLTIMOS ESFUERZOS:** Ya enviamos los datos al GPU, y le dimos las instrucciones
+al GPU sobre como procesar la información. El ultimo problema es que OpenGl no
+sabe como interpretar el vertex buffer que enviamos la memoria, ni sabe como
 conectar el vertex buffer con los atributos del vertex shader.
 
 ### Linking de los atributos del Vertex
 
-Aqui es donde le decimos a OpenGL como tenemos la informacion en la memoria.
+Aquí es donde le decimos a OpenGL como tenemos la información en la memoria.
 
 ~~~c++
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float)*3, nullptr);
@@ -406,12 +411,12 @@ Aqui es donde le decimos a OpenGL como tenemos la informacion en la memoria.
 Los argumentos son los siguientes:
 
 * El primero indica cual de los atributos queremos configurar. Recuerda que en
-  el vertex_shader dijimos que usariamos el que este el (location=0)
+  el vertex_shader dijimos que usaríamos el que este el (location=0)
 * Luego cuantos van. Pueden ser numeros del 1 al 4.
 * El tipo de dato
 * Si queremos que nos normalize los datos
 * El stride (La distancia entre atributos)
-* EL offset de el primer valor. Como no tenemos ningun offset, lo dejo como un
+* EL offset de el primer valor. Como no tenemos ningún offset, lo dejo como un
   puntero nulo
 
 Y luego lo habilitamos, si no lo habilitamos no nos va a funcionar.
@@ -446,7 +451,7 @@ dibujar si no hacemos esto, es solo un detallito pequeño.
 
 ##### Vertex Array Object
 
-Simple y sensillamente lo bindeamos cuando configuremos el vertex_buffer, lo
+Simple y sencillamente lo bindeamos cuando configuremos el vertex_buffer, lo
 desbindeamos despues, y ya luego lo bindeamos y antes de dibujar, y lo
 desbindeamos despues de dibujar
 
@@ -510,6 +515,124 @@ glDrawArrays toma los siguientes argumentos:
 
 * El primitivo a dibujar
 * El indice del que empieza en el vertex buffer
-* Cuandos vertices va a dibujar
+* Cuantos vertices va a dibujar
 
-Y con esto ya estamos. Que camino mas largo para dibujar un bendito triangulo. El codigo completo queda en el archivo src/primer_triangulo.cpp
+Y con esto ya estamos. Que camino mas largo para dibujar un bendito triangulo.
+El código completo queda en el archivo src/primer_triangulo.cpp
+
+Debugging
+=========
+
+Déjame contarte una historia. Ese primer triangulo fue un dolor de cabeza
+tremendo. Fácil me heche unas 2 o 3 horas en que me saliera. 
+
+Yo estaba todo contento, siguiendo el tutorial, y como habrás visto, para
+llegar al triangulo hay que hacer un montón de cosas. Y en realidad es muy
+fácil equivocarse en cualquiera de ellas. Y bueno, pues eso hice, me equivoque,
+lo volví a intentar, volví a fallar, y a la tercera lo logre, y vi mi error.
+
+Encima, la API no muy te ayuda. A las funciones así como `glBindBuffer`, el
+primer parámetro que les pasamos es un `GLenum`. Bueno, pues resulta que si vas
+a la definición de el `GLenum`, es en realidad un `unsigned int`. Ves el
+problema?
+
+En C++ tenemos los `enum class`. Porque? Porque el `enum` nada mas es solo un
+numero entero. Si usas el `enum` nada mas, puedes pasar enteros en el lugar en
+el que va el `enum`. También puedes pasar un `enum` diferente a la función. En
+cambio con el `enum class`, no puedes usar uno diferente al que esta en la
+lista de parámetros, errores tontos pasan a ser errores de compilación. Ahora,
+entiendo que la librería esta en C, así que no puedo pedir que se usen los
+`enum class`, pero mínimo que si sean `enum`. Si fueran `enum` diferentes al
+menos creo que un analizador estático me tiraría el error, "Hey! Estas usando
+el `enum` incorrecto". Pero no, es un `unsigned int`. Pasas el `enum`
+incorrecto, y es imposible saber que te equivocaste hasta que ya estas
+corriendo el programa.
+
+Que me paso?
+------------
+
+En esta linea:
+
+~~~c++
+    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+~~~
+
+Había colocado lo siguiente:
+
+~~~c++
+    glBindBuffer(GL_VERTEX_ARRAY, vertex_buffer);
+~~~
+
+Usar un `enum` que nada que ver me costo mínimo una hora, releyendo el
+tutorial, comparando con mi código, comparando con el código que dejaron de
+resultado. Hasta que me di cuenta, lo cambie, y al final pude ver el triangulo.
+
+Y que puedo hacer?
+------------------
+
+Pasamos mas tiempo arreglando el código que escribimos mal, que escribiendo
+código nuevo. El ser capaces de encontrar nuestros errores es una parte
+fundamental. Por eso me sorprendió ver que en el libro que estoy siguiendo
+(@sitioWeb), se habla de el manejo de errores hasta en el capitulo 47, en la
+pagina 436. 
+
+Yo la verdad es que prefiero sacarlo del paso de un solo. Así que voy a hacer
+lo siguiente: Voy a cambiar la versión de openGL que estoy usando a la versión
+4.6. Porque? Porque el buscar errores en esta versión es mas fácil usando la
+función `glDebugMessageCallback`. En las versiones anteriores a la 4.3, se
+hacia un macro `glCall()`, y cada función que llamabas la llamabas con este
+macro: `glCall(glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer));`. Recomiendo
+mucho el tutorial de `The Cherno` [Dealing with Errors in
+OpenGL](https://youtu.be/FBbPWSOQ0-w) si este es el camino que deseas tomar.
+
+Yo lo haré con el con `glDebugMessageCallback` ya que siento que el código
+queda mas limpio así, y es mas fácil.
+
+glDebugMessageCallback
+----------------------
+
+Primero que nada, el cambio de versión:
+
+~~~c++
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+~~~
+
+Luego vamos a definir la función para hacer el callback:
+
+~~~c++
+void debug_callback (GLenum source, GLenum type, GLuint id, GLenum severity,
+        GLsizei lenght, const GLchar *message, const void* userParam) {
+
+    std::cout << "<OpenGL Error> [type: " << type << ", Id: " << id << "] "
+              << "[" << severity << "]" << '\n';
+    std::cout << message << '\n';
+}
+~~~
+
+Esta de momento se vera bastante simple, e incompleta. Pero bueno, lo que de
+momento me interesa el el mensaje. Ya después la iremos mejorando. Mejor dicho
+la mejorare, y pondré otra versión después, pero por ahora esta me sirve.
+
+Ya finalmente asignamos el callback después de inicializar glad, y antes de el
+callback para ajustar tamaños.
+
+~~~c++
+    // Lo que me va a salvar de ahora en adelante.
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback(debug_callback, nullptr);
+~~~
+
+Ahora si, si te equivocas, mínimo vas a recibir el mensaje de error, y vas
+a saber que hiciste mal. Esto junto con unos print, y un buen uso de debugger,
+nos va a ayudar a salvar problemas de ahora en adelante.
+
+Siguiente
+=========
+
+Referencias
+===========
+
+* (@sitioWeb) [Learn OpenGL, Joey de Vries. Junio
+  2020](https://learnopengl.com/)

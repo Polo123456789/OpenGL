@@ -12,11 +12,13 @@ constexpr size_t CANTIDAD_VERTICES = 9;
 
 void procesarEntrada(GLFWwindow* window);
 unsigned int crearPrograma();
+void debug_callback (GLenum source, GLenum type, GLuint id, GLenum severity,
+        GLsizei lenght, const GLchar *message, const void* userParam);
 
 int main() {
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT,
@@ -32,6 +34,10 @@ int main() {
         std::cout << "No se ha podido inicializar glad\n";
         return -2;
     }
+
+    // Lo que me va a salvar de ahora en adelante.
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback(debug_callback, nullptr);
 
     auto size_callback = [] (GLFWwindow *window, int width, int height) {
         glViewport(0, 0, width, height);
@@ -97,6 +103,15 @@ void procesarEntrada(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
+}
+
+
+void debug_callback (GLenum source, GLenum type, GLuint id, GLenum severity,
+        GLsizei lenght, const GLchar *message, const void* userParam) {
+
+    std::cout << "<OpenGL Error> [type: " << type << ", Id: " << id << "] "
+              << "[" << severity << "]" << '\n';
+    std::cout << message << '\n';
 }
 
 unsigned int crearPrograma() {
